@@ -87,15 +87,6 @@ def random_strategy(player, board):
 
 board = initial_board()
 
-
-# for x in range(32):
-#     print(print_board(board))
-#     move = random_strategy(RED, board)
-#     board = make_move(move, RED, board)
-#     print(print_board(board))
-#     move = random_strategy(WHITE, board)
-#     board = make_move(move, WHITE, board)
-
 while(legal_moves(RED,board) != None):
     print(print_board(board))
     move = random_strategy(RED, board)
@@ -103,4 +94,9 @@ while(legal_moves(RED,board) != None):
     print(print_board(board))
     move = random_strategy(WHITE, board)
     board = make_move(move, WHITE, board)
+
+
+#todo
+#minimax
+#play function
 
