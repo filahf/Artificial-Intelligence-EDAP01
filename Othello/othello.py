@@ -25,11 +25,18 @@ def initial_board():
     board[54], board[55] = RED, WHITE
     return board
 
+def char_range(c1, c2):
+    for c in range(ord(c1), ord(c2)+1):
+        yield chr(c)
+
+def move_to_nbr(move):
+    x = ord(move[:1]) - 96
+    y = move[1:]
+    return str(x) + y
 
 def print_board(board):
-
     rep = ''
-    rep += ' %s\n' % ' '.join(map(str, range(1, 9)))
+    rep += ' %s\n' % ' '.join(map(str, char_range('a','h')))
     for row in range(1, 9):
         begin, end = 10*row + 1, 10*row + 9
         rep += '%d %s\n' % (row, ' '.join(board[begin:end]))
@@ -87,13 +94,17 @@ def random_strategy(player, board):
 
 board = initial_board()
 
-while(legal_moves(RED,board) != None):
-    print(print_board(board))
-    move = random_strategy(RED, board)
-    board = make_move(move, RED, board)
-    print(print_board(board))
-    move = random_strategy(WHITE, board)
-    board = make_move(move, WHITE, board)
+print(print_board(board))
+print(legal_moves(RED,board))
+print(move_to_nbr('b5'))
+
+# while(legal_moves(RED,board) != None):
+#     print(print_board(board))
+#     move = random_strategy(RED, board)
+#     board = make_move(move, RED, board)
+#     print(print_board(board))
+#     move = random_strategy(WHITE, board)
+#     board = make_move(move, WHITE, board)
 
 
 #todo
