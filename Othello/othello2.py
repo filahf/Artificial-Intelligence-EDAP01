@@ -4,7 +4,7 @@ import random
 import math
 
 
-EMPTY, BLACK, WHITE, OUTER = '.', '\033[1;30;41m \033[0m', '\033[1;30;47m \033[0m', '?'
+EMPTY, BLACK, WHITE, OUTER = '.', '\033[1;30;41m \033[0m', '\033[1;30;47m \033[0m', ''
 DIRECTIONS = (-11, -10, -9, -1, 1, 9, 10, 11)
 
 
@@ -141,23 +141,24 @@ def main():
 
     ai = 0
 
-    for i in range(3):
+    for i in range(1):
         board = initial_board()
         turn = BLACK
         while turn is not None:
 
             if(turn == BLACK):
-                # print("",print_board(board))
+                print(print_board(board))
                 move = random_strategy(BLACK, board)
                 board = make_move(move, BLACK, board)
                 turn = next_player(board, BLACK)
             if(turn == WHITE):
-                # print("",print_board(board))
+                print(print_board(board))
                 move = alphabeta(WHITE, board, -math.inf,
                                  math.inf, 7, score)[1]
                 board = make_move(move, WHITE, board)
                 turn = next_player(board, WHITE)
         if(score(WHITE, board) > score(BLACK, board)):
+            print("AI won")
             ai = ai + 1
         i += 1
         print(print_board(board))
