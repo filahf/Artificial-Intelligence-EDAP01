@@ -1,20 +1,11 @@
 
 
 import random
-
+import math
 
 
 EMPTY, BLACK, WHITE, OUTER = '.', '\033[1;30;41m \033[0m', '\033[1;30;47m \033[0m', '?'
-PIECES = (EMPTY, BLACK, WHITE, OUTER)
-
-
-UP, DOWN, LEFT, RIGHT = -10, 10, -1, 1
-UP_RIGHT, DOWN_RIGHT, DOWN_LEFT, UP_LEFT = -9, 11, 9, -11
-DIRECTIONS = (UP, UP_RIGHT, RIGHT, DOWN_RIGHT, DOWN, DOWN_LEFT, LEFT, UP_LEFT)
-
-MAX_VALUE = 10000
-MIN_VALUE = -MAX_VALUE
-
+DIRECTIONS = (-11, -10, -9, -1, 1, 9, 10, 11)
 
 
 def squares():
@@ -43,10 +34,8 @@ def is_valid(move):
     return isinstance(move, int) and move in squares()
 
 
-
 def opponent(player):
     return BLACK if player is WHITE else WHITE
-
 
 
 def find_bracket(square, player, board, direction):
@@ -59,9 +48,9 @@ def find_bracket(square, player, board, direction):
     return None if board[bracket] in (OUTER, EMPTY) else bracket
 
 
-
 def is_legal(move, player, board):
-    hasbracket = lambda direction: find_bracket(move, player, board, direction)
+    def hasbracket(direction): return find_bracket(
+        move, player, board, direction)
     return board[move] == EMPTY and any(map(hasbracket, DIRECTIONS))
 
 
@@ -70,7 +59,6 @@ def make_move(move, player, board):
     for d in DIRECTIONS:
         make_flips(move, player, board, d)
     return board
-
 
 
 def make_flips(move, player, board, direction):
@@ -83,17 +71,12 @@ def make_flips(move, player, board, direction):
         square += direction
 
 
-
 def legal_moves(player, board):
     return [sq for sq in squares() if is_legal(sq, player, board)]
 
 
-
 def any_legal_move(player, board):
     return any(is_legal(sq, player, board) for sq in squares())
-
-
-
 
 
 def next_player(board, prev_player):
@@ -105,40 +88,36 @@ def next_player(board, prev_player):
     return None
 
 
-
 def score(player, board):
     mine, theirs = 0, 0
     opp = opponent(player)
     for sq in squares():
         piece = board[sq]
-        if piece == player: mine += 1
-        elif piece == opp: theirs += 1
+        if piece == player:
+            mine += 1
+        elif piece == opp:
+            theirs += 1
     return mine - theirs
-
 
 
 def final_value(player, board):
 
     diff = score(player, board)
     if diff < 0:
-        return MIN_VALUE
+        return -math.inf
     elif diff > 0:
-        return MAX_VALUE
+        return math.inf
     return diff
-
-
-
-
 
 
 def random_strategy(player, board):
     return random.choice(legal_moves(player, board))
 
 
-
 def alphabeta(player, board, alpha, beta, depth, evaluate):
     if depth == 0:
         return evaluate(player, board), "null"
+
     def value(board, alpha, beta):
         return -alphabeta(opponent(player), board, -beta, -alpha, depth-1, evaluate)[0]
     moves = legal_moves(player, board)
@@ -158,7 +137,6 @@ def alphabeta(player, board, alpha, beta, depth, evaluate):
     return alpha, best_move
 
 
-
 def main():
 
     ai = 0
@@ -167,37 +145,24 @@ def main():
         board = initial_board()
         turn = BLACK
         while turn is not None:
-            
+
             if(turn == BLACK):
-                    #print("",print_board(board))
-                    move = random_strategy(BLACK, board)
-                    board = make_move(move, BLACK, board)
-                    turn = next_player(board,BLACK)
+                # print("",print_board(board))
+                move = random_strategy(BLACK, board)
+                board = make_move(move, BLACK, board)
+                turn = next_player(board, BLACK)
             if(turn == WHITE):
-                    #print("",print_board(board))
-                    move = alphabeta(WHITE, board, MIN_VALUE, MAX_VALUE, 7, score)[1]
-                    board = make_move(move, WHITE, board)
-                    turn = next_player(board,WHITE)
-        if(score(WHITE,board)>score(BLACK,board)):
+                # print("",print_board(board))
+                move = alphabeta(WHITE, board, -math.inf,
+                                 math.inf, 7, score)[1]
+                board = make_move(move, WHITE, board)
+                turn = next_player(board, WHITE)
+        if(score(WHITE, board) > score(BLACK, board)):
             ai = ai + 1
         i += 1
         print(print_board(board))
         print(i)
     print("AI won", ai)
-        
-
-    
 
 
 main()
-
-
-
-
-
-
-
-
-
-
-
