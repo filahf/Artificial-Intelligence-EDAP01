@@ -4,9 +4,8 @@ import random
 
 
 
-EMPTY, BLACK, WHITE, OUTER = '.', '@', 'o', '?'
+EMPTY, BLACK, WHITE, OUTER = '.', '\033[1;30;41m \033[0m', '\033[1;30;47m \033[0m', '?'
 PIECES = (EMPTY, BLACK, WHITE, OUTER)
-PLAYERS = {BLACK: 'Black', WHITE: 'White'}
 
 
 UP, DOWN, LEFT, RIGHT = -10, 10, -1, 1
