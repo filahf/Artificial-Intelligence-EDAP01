@@ -7,6 +7,14 @@ import math
 EMPTY, BLACK, WHITE, OUTER = '.', '\033[1;30;41m \033[0m', '\033[1;30;47m \033[0m', ''
 DIRECTIONS = (-11, -10, -9, -1, 1, 9, 10, 11)
 
+def char_range(c1, c2):
+    for c in range(ord(c1), ord(c2)+1):
+        yield chr(c)
+
+def move_to_nbr(move):
+    x = ord(move[:1]) - 96
+    y = move[1:]
+    return str(x) + y
 
 def squares():
     return [i for i in range(11, 89) if 1 <= (i % 10) <= 8]
@@ -23,16 +31,11 @@ def initial_board():
 
 def print_board(board):
     rep = ''
-    rep += '  %s\n' % ' '.join(map(str, range(1, 9)))
+    rep += '  %s\n' % ' '.join(map(str, char_range('a', 'h')))
     for row in range(1, 9):
         begin, end = 10*row + 1, 10*row + 9
         rep += '%d %s\n' % (row, ' '.join(board[begin:end]))
     return rep
-
-
-def is_valid(move):
-    return isinstance(move, int) and move in squares()
-
 
 def opponent(player):
     return BLACK if player is WHITE else WHITE
@@ -72,11 +75,11 @@ def make_flips(move, player, board, direction):
 
 
 def legal_moves(player, board):
-    return [sq for sq in squares() if is_legal(sq, player, board)]
+    return [square for square in squares() if is_legal(square, player, board)]
 
 
 def any_legal_move(player, board):
-    return any(is_legal(sq, player, board) for sq in squares())
+    return any(is_legal(square, player, board) for square in squares())
 
 
 def next_player(board, prev_player):
@@ -89,37 +92,43 @@ def next_player(board, prev_player):
 
 
 def score(player, board):
-    mine, theirs = 0, 0
+    player1 = 0
+    player2 = 0
     opp = opponent(player)
-    for sq in squares():
-        piece = board[sq]
+    for square in squares():
+        piece = board[square]
         if piece == player:
-            mine += 1
+            player1 += 1
         elif piece == opp:
-            theirs += 1
-    return mine - theirs
+            player2 += 1
+    return player1 - player2
 
 
 def final_value(player, board):
 
-    diff = score(player, board)
-    if diff < 0:
+    score_diff = score(player, board)
+    if(score_diff < 0):
         return -math.inf
-    elif diff > 0:
+    elif(score_diff > 0):
         return math.inf
-    return diff
+    elif(score_diff == 0):
+        return 0
 
 
 def random_strategy(player, board):
     return random.choice(legal_moves(player, board))
 
 
-def alphabeta(player, board, alpha, beta, depth, evaluate):
+def alphabeta(player, board, alpha, beta, depth):
+    # Find the best move, for PLAYER
+    # searching depth levels deep and backing up values,
+    # using cutoffs whenever possible."
+
     if depth == 0:
-        return evaluate(player, board), "null"
+        return score(player, board), "null"
 
     def value(board, alpha, beta):
-        return -alphabeta(opponent(player), board, -beta, -alpha, depth-1, evaluate)[0]
+        return -alphabeta(opponent(player), board, -beta, -alpha, depth-1)[0]
     moves = legal_moves(player, board)
     if not moves:
         if not any_legal_move(opponent(player), board):
@@ -146,23 +155,22 @@ def main():
         turn = BLACK
         while turn is not None:
 
+            print(print_board(board), end='\r')
             if(turn == BLACK):
-                print(print_board(board))
                 move = random_strategy(BLACK, board)
                 board = make_move(move, BLACK, board)
                 turn = next_player(board, BLACK)
             if(turn == WHITE):
-                print(print_board(board))
+                #print(print_board(board))
                 move = alphabeta(WHITE, board, -math.inf,
-                                 math.inf, 7, score)[1]
+                                 math.inf, 6)[1]
                 board = make_move(move, WHITE, board)
                 turn = next_player(board, WHITE)
         if(score(WHITE, board) > score(BLACK, board)):
             print("AI won")
             ai = ai + 1
         i += 1
-        print(print_board(board))
-        print(i)
+        print("game",i)
     print("AI won", ai)
 
 
