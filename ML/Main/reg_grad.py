@@ -45,7 +45,9 @@ while step > precision:
     iters = iters+1
     step = abs(m - prev_m)
 
-print(iters)
+print("y=mx+b")
+print("m: ",m )
+print("b", b)
 plot_line(y, x_points)
 plt.plot(x_points, y_points, 'bo')
 plt.show()

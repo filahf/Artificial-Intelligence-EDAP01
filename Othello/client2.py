@@ -1,12 +1,11 @@
 
-import socket
 
-HOST = 'vm33.cs.lth.se'  # The server's hostname or IP address
-PORT = 9035        # The port used by the server
+import socket  # import socket module
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.connect((HOST, PORT))
-    s.sendall(b'Hello, world')
-    data = s.recv(1024)
+s = socket.socket()  # create a socket object
+host = 'vm33.cs.lth.se'  # Host i.p
+port = 9035  # Reserve a port for your service
 
-print('Received', repr(data))
+s.connect((host, port))
+print(s.recv(1024))
+s.close
