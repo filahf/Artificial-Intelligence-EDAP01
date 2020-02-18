@@ -150,12 +150,12 @@ def main():
 
     ai = 0
 
-    for i in range(20):
+    for i in range(1):
         board = initial_board()
         turn = BLACK
         while turn is not None:
 
-            #print(print_board(board), end='\r')
+            print(print_board(board), end='\r')
             if(turn == BLACK):
                 move = random_strategy(BLACK, board)
                 board = make_move(move, BLACK, board)
@@ -163,13 +163,13 @@ def main():
             if(turn == WHITE):
                 #print(print_board(board))
                 move = alphabeta(WHITE, board, -math.inf,
-                                 math.inf, 8)[1]
+                                 math.inf, 7)[1]
                 board = make_move(move, WHITE, board)
                 turn = next_player(board, WHITE)
         if(score(WHITE, board) > score(BLACK, board)):
             print("AI won")
             ai = ai + 1
-        print(print_board(board))
+        #print(print_board(board))
         i += 1
         print("game",i)
     print("AI won", ai)
