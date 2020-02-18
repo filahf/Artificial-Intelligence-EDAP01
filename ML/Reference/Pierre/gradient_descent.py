@@ -102,7 +102,7 @@ if __name__ == '__main__':
     w = [0.0] * (len(X))
     w = batch_descent(X, y, alpha, w)
     print("Weights", w)
-    print("SSE", sse(X, y, w))
+    #print("SSE", sse(X, y, w))
     if normalized:
         print("Restored weights", [w[i] * maxima[-1] / maxima[i] for i in range(len(w))])
     if debug:

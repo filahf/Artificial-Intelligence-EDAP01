@@ -3,12 +3,15 @@ import numpy as np
 x = []
 y = []
 
+salammbo_a_en = "ML/Main/data/salammbo_a_en.tsv"
+salammbo_a_fr = "ML/Main/data/salammbo_a_fr.tsv"
 
-with open("/home/filip/Documents/Artificial-Intelligence-EDAP01/ML/data/salammbo_a_en.tsv") as fd:
-    rd = csv.reader(fd, delimiter="\t", quotechar='"')
-    for row in rd:
-        x.append(int(row[0]))
-        y.append(int(row[1]))
+def load_data(file):
+    with open(file) as fd:
+        rd = csv.reader(fd, delimiter="\t", quotechar='"')
+        for row in rd:
+            x.append(int(row[0]))
+            y.append(int(row[1]))
 
 
 def normalize(v):
@@ -17,7 +20,8 @@ def normalize(v):
         return v
     return v / norm
 
-
-x = normalize(x)
-y = normalize(y)
-print(y)
+load_data(salammbo_a_en)
+load_data(salammbo_a_fr)
+#x = normalize(x)
+#y = normalize(y)
+print(x)
