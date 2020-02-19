@@ -2,8 +2,8 @@ import csv
 import numpy as np
 
 
-salammbo_a_en = "/home/filip/Documents/Artificial-Intelligence-EDAP01/ML/Gammal ML/Main/salammbo_a_en.tsv"
-salammbo_a_fr = "ML/Main/data/salammbo_a_fr.tsv"
+salammbo_a_en = "A2/salammbo_a_en.tsv"
+salammbo_a_fr = "A2/salammbo_a_fr.tsv"
 
 def load_data(file):
     x = []
