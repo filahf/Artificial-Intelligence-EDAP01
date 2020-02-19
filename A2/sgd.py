@@ -2,14 +2,14 @@
 # python sgd.py
 
 # import the necessary packages
+import data
 import matplotlib.pyplot as plt
 from sklearn.datasets.samples_generator import make_blobs
 import numpy as np
-import argparse
 
-learning_rate = 0.01
+learning_rate = 0.0001
 batch_size = 1
-epochs = 100
+epochs = 100000000
 
 def sigmoid_activation(x):
 	# compute and return the sigmoid activation value for a
@@ -25,10 +25,13 @@ def next_batch(X, y, batchSize):
 
 # generate a 2-class classification problem with 400 data points,
 # where each data point is a 2D feature vector
-(X, y) = make_blobs(n_samples=400, n_features=2, centers=2,
-	cluster_std=2.5, random_state=95)
-# print("X",X)
-# print("y",y)
+X = data.perc_data()
+y = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+# (X, y) = make_blobs(n_samples=4, n_features=2, centers=2,
+# 	cluster_std=2.5, random_state=95)
+print("X",X)
+print("y",y)
+#np.column_stack((lat, lon))
 
 # insert a column of 1's as the first entry in the feature
 # vector -- this is a little trick that allows us to treat
