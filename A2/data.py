@@ -1,17 +1,22 @@
 import csv
 import numpy as np
-x = []
-y = []
 
-salammbo_a_en = "ML/Main/data/salammbo_a_en.tsv"
+
+salammbo_a_en = "/home/filip/Documents/Artificial-Intelligence-EDAP01/ML/Gammal ML/Main/salammbo_a_en.tsv"
 salammbo_a_fr = "ML/Main/data/salammbo_a_fr.tsv"
 
 def load_data(file):
+    x = []
+    y = []
     with open(file) as fd:
         rd = csv.reader(fd, delimiter="\t", quotechar='"')
         for row in rd:
             x.append(int(row[0]))
             y.append(int(row[1]))
+    x = normalize(x)
+    y = normalize(y)
+    return x, y
+
 
 
 def normalize(v):
@@ -20,8 +25,8 @@ def normalize(v):
         return v
     return v / norm
 
-load_data(salammbo_a_en)
-load_data(salammbo_a_fr)
+#x, y = load_data(salammbo_a_en)
+#load_data(salammbo_a_fr)
 #x = normalize(x)
 #y = normalize(y)
-print(x)
+#print(x)
