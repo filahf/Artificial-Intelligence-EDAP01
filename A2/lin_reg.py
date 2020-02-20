@@ -11,6 +11,7 @@ def col_of_ones(X):
 
 def bgd(X, y, learning_rate, epochs, batch_size):
     w0, w1, w2 = 1, 1, 1
+    #weights = np.ones(3)
     m = len(X)
     for iters in range(epochs):
         indices = np.random.permutation(m)
@@ -76,14 +77,13 @@ def perform_bgd(chars_all, chars_a, learning_rate, epochs, batch_size):
 
 
 def main():
-    batch_size = 2
+    batch_size = 5
     learning_rate = 0.01
     epochs = 100000
     chars_all, chars_a = data.load_data(
         "/home/filip/Documents/Artificial-Intelligence-EDAP01/A2/salammbo_a_en.tsv")
     #perform_sgd(chars_all, chars_a, learning_rate, epochs)
-    print(chars_a)
-    #perform_bgd(chars_all, chars_a,learning_rate,epochs,batch_size)
+    perform_bgd(chars_all, chars_a,learning_rate,epochs,batch_size)
 
 
 if __name__ == "__main__":

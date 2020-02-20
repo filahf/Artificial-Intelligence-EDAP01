@@ -13,22 +13,24 @@ def libsvm_reader(file):
     return data, labels
 
 
-def predict(weights, input):
-    sum = np.dot(input, weights[1:]) + weights[0]
-    if sum > 0:
-        return 1
+def predict(weights, input, logistic):
+    if(logistic):
+        print("hej")
     else:
-        #print("HIT",sum)
-        return 0
+        sum = np.dot(input, weights[1:]) + weights[0]
+        if sum > 0:
+            return 1
+        else:
+            return 0
 
 
-def train(training_set, labels, learning_rate, epochs):
+def train(training_set, labels, learning_rate, epochs, logistic = False):
     weights = np.zeros(3)
     iters = 0
     miss = 0
     for i in range(epochs):
         for inputs, label in zip(training_set, labels):
-            prediction = predict(weights, inputs)
+            prediction = predict(weights, inputs, logistic)
             if(prediction != label):
                 miss += 1
 
@@ -51,10 +53,10 @@ def main():
     print("Weights", training_weights)
 
     arr = np.array([75352,4871])
-    print("predicted", predict(training_weights, arr))
+    print("predicted", predict(training_weights, arr, logistic = False))
 
     # --------PLOT----------------
-    x = np.linspace(0, 100000, 10000000)
+    x = np.linspace(0, 85000, 10000000)
     Y = (-training_weights[0] - training_weights[1] * x) / training_weights[2]
     chars = [i[0] for i in data]
     chars_a = [i[1] for i in data]
