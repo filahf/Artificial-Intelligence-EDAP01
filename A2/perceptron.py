@@ -15,7 +15,9 @@ def libsvm_reader(file):
 
 def predict(weights, input, logistic):
     if(logistic):
-        print("hej")
+        exponent = np.dot(input, weights[1:]) + weights[0]
+        # eventuellt utand weights[0]
+        return 1.0 / (1 + np.exp(-exponent))
     else:
         sum = np.dot(input, weights[1:]) + weights[0]
         if sum > 0:
@@ -52,8 +54,8 @@ def main():
     training_weights = train(data, labels, learning_rate, epochs)
     print("Weights", training_weights)
 
-    arr = np.array([75352,4871])
-    print("predicted", predict(training_weights, arr, logistic = False))
+    #arr = np.array([75352,4871])
+    #print("predicted", predict(training_weights, arr, logistic = False))
 
     # --------PLOT----------------
     x = np.linspace(0, 85000, 10000000)
