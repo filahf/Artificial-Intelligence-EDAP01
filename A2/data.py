@@ -25,22 +25,12 @@ def normalize(v):
         return v
     return v / norm
 
-def perc_data():
-    x, y = load_data(salammbo_a_en)
-    X = np.column_stack((x, y))
-    
-    u, v = load_data(salammbo_a_fr)
-    Y = np.column_stack((u, v))
-    data = np.concatenate([X,Y])
-    print(data)
-    return data
     
 
 x, y = load_data(salammbo_a_fr)
 #load_data(salammbo_a_fr)
 #x = normalize(x)
 #y = normalize(y)
-X = np.column_stack((x, y))
+#X = np.column_stack((x, y))
 #perc_data()
-X = np.c_[np.ones((X.shape[0])), X]
-print(X)
+#print(X)
