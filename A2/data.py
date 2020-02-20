@@ -36,10 +36,11 @@ def perc_data():
     return data
     
 
-x, y = load_data(salammbo_a_en)
+x, y = load_data(salammbo_a_fr)
 #load_data(salammbo_a_fr)
 #x = normalize(x)
 #y = normalize(y)
 X = np.column_stack((x, y))
-perc_data()
-#print(X)
+#perc_data()
+X = np.c_[np.ones((X.shape[0])), X]
+print(X)
