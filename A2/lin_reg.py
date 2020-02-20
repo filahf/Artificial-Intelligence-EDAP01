@@ -82,7 +82,8 @@ def main():
     chars_all, chars_a = data.load_data(
         "/home/filip/Documents/Artificial-Intelligence-EDAP01/A2/salammbo_a_en.tsv")
     #perform_sgd(chars_all, chars_a, learning_rate, epochs)
-    perform_bgd(chars_all, chars_a,learning_rate,epochs,batch_size)
+    print(chars_a)
+    #perform_bgd(chars_all, chars_a,learning_rate,epochs,batch_size)
 
 
 if __name__ == "__main__":
