@@ -194,12 +194,6 @@ def main():
                 turn = next_player(board,BLACK)
             if(player == BLACK):
                 board, turn = player_move(player,board)
-                # print(print_board(board))
-                # print("You are playing as "+ player + ", your turn!")
-                # print("Availble moves are: ", availble_human_moves(BLACK,board))
-                # move = input("Enter move ")
-                # board = make_move(move_to_nbr(move),BLACK,board)
-                # turn = next_player(board,BLACK)
         if(turn == WHITE):
             if(ai == WHITE):
                 
@@ -208,12 +202,6 @@ def main():
                 turn = next_player(board,WHITE)
             elif(player == WHITE):
                 board, turn = player_move(player,board)
-                # print(print_board(board))
-                # print("You are playing as "+ player + ", your turn!")
-                # print("Availble moves are: ", availble_human_moves(WHITE,board))
-                # move = input("Enter move ")
-                # board = make_move(move_to_nbr(move),WHITE,board)
-                # turn = next_player(board,WHITE)
         else:
             print("--------FINAL BOARD------")
             print(print_board(board))
