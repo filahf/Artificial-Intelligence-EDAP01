@@ -12,9 +12,10 @@ def char_range(c1, c2):
         yield chr(c)
 
 def move_to_nbr(move):
-    x = ord(move[:1]) - 96
-    y = move[1:]
-    return str(x) + y
+    y = ord(move[:1]) - 96
+    x = move[1:]
+    #print(str(x) + y)
+    return int(x + str(y))
 
 def squares():
     return [i for i in range(11, 89) if 1 <= (i % 10) <= 8]
@@ -115,10 +116,6 @@ def final_value(player, board):
         return 0
 
 
-def random_strategy(player, board):
-    return random.choice(legal_moves(player, board))
-
-
 def alphabeta(player, board, alpha, beta, depth):
     # Find the best move, for PLAYER
     # searching depth levels deep and backing up values,
@@ -145,34 +142,80 @@ def alphabeta(player, board, alpha, beta, depth):
             best_move = move
     return alpha, best_move
 
+def availble_human_moves(player,board):
+    arr = legal_moves(player,board)
+    chars = "abcdefgh"
+    movs = []
+    for i in arr:
+        move = str(i)
+        x = chars[int(move[1]) + 1]
+        y = str(move[0])
+        movs.append(x+y)
+    return movs
+
 
 def main():
+    board = initial_board()
+    player = input("Choose color WHITE or BLACK: ")
+    print(player)
+    ai = opponent(player)
+    turn = BLACK
+    while(True):
+        if(turn == BLACK):
+            if(ai == BLACK):
+                move = alphabeta(BLACK, board, -math.inf,math.inf, 7)[1]
+                board = make_move(move,BLACK,board)
+                turn = next_player(board,BLACK)
+            else:
+                print(print_board(board))
+                print("You are playing as "+ player + ", your turn!")
+                print("Availble moves are: ", legal_moves(BLACK,board))
+                move = input("Enter move ")
+                board = make_move(int(move),BLACK,board)
+                turn = next_player(board,BLACK)
+        if(turn == WHITE):
+            if(ai == WHITE):
+                move = alphabeta(WHITE, board, -math.inf,math.inf, 7)[1]
+                board = make_move(move,WHITE,board)
+                turn = next_player(board,WHITE)
+            else:
+                print(print_board(board))
+                print("You are playing as "+ player + ", your turn!")
+                print("Availble moves are: ", legal_moves(WHITE,board))
+                move = input("Enter move ")
+                board = make_move(int(move),WHITE,board)
+                turn = next_player(board,WHITE)
+        if(turn == None):
+            print("AI score: ", score(ai,board))
+            print("Player score: ", score(player,board))
+            break
 
-    ai = 0
-
-    for i in range(1):
-        board = initial_board()
-        turn = BLACK
-        while turn is not None:
-
-            print(print_board(board), end='\r')
-            if(turn == BLACK):
-                move = random_strategy(BLACK, board)
-                board = make_move(move, BLACK, board)
-                turn = next_player(board, BLACK)
-            if(turn == WHITE):
-                #print(print_board(board))
-                move = alphabeta(WHITE, board, -math.inf,
-                                 math.inf, 7)[1]
-                board = make_move(move, WHITE, board)
-                turn = next_player(board, WHITE)
-        if(score(WHITE, board) > score(BLACK, board)):
-            print("AI won")
-            ai = ai + 1
-        #print(print_board(board))
-        i += 1
-        print("game",i)
-    print("AI won", ai)
+if __name__ == "__main__":
+    main()
 
 
-main()
+    # ai = 0
+
+    # for i in range(1):
+    #     board = initial_board()
+    #     turn = BLACK
+    #     while turn is not None:
+
+    #         print(print_board(board), end='\r')
+    #         if(turn == BLACK):
+    #             move = random_strategy(BLACK, board)
+    #             board = make_move(move, BLACK, board)
+    #             turn = next_player(board, BLACK)
+    #         if(turn == WHITE):
+    #             #print(print_board(board))
+    #             move = alphabeta(WHITE, board, -math.inf,
+    #                              math.inf, 7)[1]
+    #             board = make_move(move, WHITE, board)
+    #             turn = next_player(board, WHITE)
+    #     if(score(WHITE, board) > score(BLACK, board)):
+    #         print("AI won")
+    #         ai = ai + 1
+    #     #print(print_board(board))
+    #     i += 1
+    #     print("game",i)
+    # print("AI won", ai)
