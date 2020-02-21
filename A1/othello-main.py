@@ -153,41 +153,71 @@ def availble_human_moves(player,board):
         movs.append(x+y)
     return movs
 
+def get_winner(board):
+    if(score(WHITE, board) > score(BLACK, board)):
+        return "White won"
+    elif(score(WHITE, board) == score(BLACK, board)):
+        return "DRAW"
+    else:
+        return "Black won"
+                
+
+def player_move(player,board):
+    print(print_board(board))
+    print("You are playing as "+ player + ", your turn!")
+    print("Availble moves are: ", availble_human_moves(player,board))
+    move = input("Enter move ")
+    board = make_move(move_to_nbr(move),player,board)
+    turn = next_player(board,player)
+    return board, turn
+
+
+
 
 def main():
     board = initial_board()
-    player = input("Choose color WHITE or BLACK: ")
-    print(player)
+    player_input = input("Choose color b/w: ")
+    player = EMPTY
+    if(player_input == "b"):
+        player = BLACK
+    elif(player_input == 'w'):
+        player = WHITE
+        print("in w",player)
     ai = opponent(player)
     turn = BLACK
     while(True):
         if(turn == BLACK):
             if(ai == BLACK):
+                
                 move = alphabeta(BLACK, board, -math.inf,math.inf, 7)[1]
                 board = make_move(move,BLACK,board)
                 turn = next_player(board,BLACK)
-            else:
-                print(print_board(board))
-                print("You are playing as "+ player + ", your turn!")
-                print("Availble moves are: ", availble_human_moves(BLACK,board))
-                move = input("Enter move ")
-                board = make_move(int(move),BLACK,board)
-                turn = next_player(board,BLACK)
+            if(player == BLACK):
+                board, turn = player_move(player,board)
+                # print(print_board(board))
+                # print("You are playing as "+ player + ", your turn!")
+                # print("Availble moves are: ", availble_human_moves(BLACK,board))
+                # move = input("Enter move ")
+                # board = make_move(move_to_nbr(move),BLACK,board)
+                # turn = next_player(board,BLACK)
         if(turn == WHITE):
             if(ai == WHITE):
+                
                 move = alphabeta(WHITE, board, -math.inf,math.inf, 7)[1]
                 board = make_move(move,WHITE,board)
                 turn = next_player(board,WHITE)
-            else:
-                print(print_board(board))
-                print("You are playing as "+ player + ", your turn!")
-                print("Availble moves are: ", legal_moves(WHITE,board))
-                move = input("Enter move ")
-                board = make_move(int(move),WHITE,board)
-                turn = next_player(board,WHITE)
-        if(turn == None):
-            print("AI score: ", score(ai,board))
-            print("Player score: ", score(player,board))
+            elif(player == WHITE):
+                board, turn = player_move(player,board)
+                # print(print_board(board))
+                # print("You are playing as "+ player + ", your turn!")
+                # print("Availble moves are: ", availble_human_moves(WHITE,board))
+                # move = input("Enter move ")
+                # board = make_move(move_to_nbr(move),WHITE,board)
+                # turn = next_player(board,WHITE)
+        else:
+            print("--------FINAL BOARD------")
+            print(print_board(board))
+            print(get_winner(board))
             break
 
 if __name__ == "__main__":
