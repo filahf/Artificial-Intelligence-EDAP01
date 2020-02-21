@@ -148,7 +148,7 @@ def availble_human_moves(player,board):
     movs = []
     for i in arr:
         move = str(i)
-        x = chars[int(move[1]) + 1]
+        x = chars[int(move[1])-1]
         y = str(move[0])
         movs.append(x+y)
     return movs
@@ -169,7 +169,7 @@ def main():
             else:
                 print(print_board(board))
                 print("You are playing as "+ player + ", your turn!")
-                print("Availble moves are: ", legal_moves(BLACK,board))
+                print("Availble moves are: ", availble_human_moves(BLACK,board))
                 move = input("Enter move ")
                 board = make_move(int(move),BLACK,board)
                 turn = next_player(board,BLACK)
