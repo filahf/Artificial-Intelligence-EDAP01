@@ -167,6 +167,9 @@ def player_move(player,board):
     print("You are playing as "+ player + ", your turn!")
     print("Availble moves are: ", availble_human_moves(player,board))
     move = input("Enter move ")
+    if(move not in availble_human_moves(player,board)):
+        print("Illegal move, try again")
+        move = input("Enter move ")
     board = make_move(move_to_nbr(move),player,board)
     turn = next_player(board,player)
     return board, turn
