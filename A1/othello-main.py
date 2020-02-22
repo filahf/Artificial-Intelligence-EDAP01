@@ -2,6 +2,7 @@
 
 import random
 import math
+import time
 
 
 EMPTY, BLACK, WHITE, OUTER = '.', '\033[1;30;41m \033[0m', '\033[1;30;47m \033[0m', ''
@@ -117,10 +118,6 @@ def final_value(player, board):
 
 
 def alphabeta(player, board, alpha, beta, depth):
-    # Find the best move, for PLAYER
-    # searching depth levels deep and backing up values,
-    # using cutoffs whenever possible."
-
     if depth == 0:
         return score(player, board), "null"
 
@@ -180,6 +177,7 @@ def player_move(player,board):
 def main():
     board = initial_board()
     player_input = input("Choose color b/w: ")
+    delay = int(input("How long do you want to wait before the computer makes a move?"))
     player = EMPTY
     if(player_input == "b"):
         player = BLACK
@@ -191,18 +189,22 @@ def main():
     while(True):
         if(turn == BLACK):
             if(ai == BLACK):
-                
+                print("pruning...")
+                time.sleep(delay)
                 move = alphabeta(BLACK, board, -math.inf,math.inf, 7)[1]
                 board = make_move(move,BLACK,board)
                 turn = next_player(board,BLACK)
+                print("--------------------------------------------")
             if(player == BLACK):
                 board, turn = player_move(player,board)
         if(turn == WHITE):
             if(ai == WHITE):
-                
+                print("pruning...")
+                time.sleep(delay)
                 move = alphabeta(WHITE, board, -math.inf,math.inf, 7)[1]
                 board = make_move(move,WHITE,board)
                 turn = next_player(board,WHITE)
+                print("--------------------------------------------")
             elif(player == WHITE):
                 board, turn = player_move(player,board)
         else:
