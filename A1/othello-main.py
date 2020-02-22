@@ -15,7 +15,6 @@ def char_range(c1, c2):
 def move_to_nbr(move):
     y = ord(move[:1]) - 96
     x = move[1:]
-    #print(str(x) + y)
     return int(x + str(y))
 
 def squares():
@@ -94,16 +93,11 @@ def next_player(board, prev_player):
 
 
 def score(player, board):
-    player1 = 0
-    player2 = 0
-    opp = opponent(player)
-    for square in squares():
-        piece = board[square]
-        if piece == player:
-            player1 += 1
-        elif piece == opp:
-            player2 += 1
-    return player1 - player2
+    player_score = board.count(player)
+    opp_score = board.count(opponent(player))
+    return player_score - opp_score
+
+
 
 
 def final_value(player, board):
@@ -117,12 +111,12 @@ def final_value(player, board):
         return 0
 
 
-def alphabeta(player, board, alpha, beta, depth):
+def alpha_beta(player, board, alpha, beta, depth):
     if depth == 0:
         return score(player, board), "null"
 
     def value(board, alpha, beta):
-        return -alphabeta(opponent(player), board, -beta, -alpha, depth-1)[0]
+        return -alpha_beta(opponent(player), board, -beta, -alpha, depth-1)[0]
     moves = legal_moves(player, board)
     if not moves:
         if not any_legal_move(opponent(player), board):
@@ -151,6 +145,9 @@ def availble_human_moves(player,board):
     return movs
 
 def get_winner(board):
+    print("--------FINAL BOARD------")
+    print(print_board(board))
+    print("W: ", board.count(WHITE), "  B: ", board.count(BLACK))
     if(score(WHITE, board) > score(BLACK, board)):
         return "White won"
     elif(score(WHITE, board) == score(BLACK, board)):
@@ -191,7 +188,7 @@ def main():
             if(ai == BLACK):
                 print("pruning...")
                 time.sleep(delay)
-                move = alphabeta(BLACK, board, -math.inf,math.inf, 7)[1]
+                move = alpha_beta(BLACK, board, -math.inf,math.inf, 7)[1]
                 board = make_move(move,BLACK,board)
                 turn = next_player(board,BLACK)
                 print("--------------------------------------------")
@@ -201,44 +198,15 @@ def main():
             if(ai == WHITE):
                 print("pruning...")
                 time.sleep(delay)
-                move = alphabeta(WHITE, board, -math.inf,math.inf, 7)[1]
+                move = alpha_beta(WHITE, board, -math.inf,math.inf, 7)[1]
                 board = make_move(move,WHITE,board)
                 turn = next_player(board,WHITE)
                 print("--------------------------------------------")
             elif(player == WHITE):
                 board, turn = player_move(player,board)
         else:
-            print("--------FINAL BOARD------")
-            print(print_board(board))
             print(get_winner(board))
             break
 
 if __name__ == "__main__":
     main()
-
-
-    # ai = 0
-
-    # for i in range(1):
-    #     board = initial_board()
-    #     turn = BLACK
-    #     while turn is not None:
-
-    #         print(print_board(board), end='\r')
-    #         if(turn == BLACK):
-    #             move = random_strategy(BLACK, board)
-    #             board = make_move(move, BLACK, board)
-    #             turn = next_player(board, BLACK)
-    #         if(turn == WHITE):
-    #             #print(print_board(board))
-    #             move = alphabeta(WHITE, board, -math.inf,
-    #                              math.inf, 7)[1]
-    #             board = make_move(move, WHITE, board)
-    #             turn = next_player(board, WHITE)
-    #     if(score(WHITE, board) > score(BLACK, board)):
-    #         print("AI won")
-    #         ai = ai + 1
-    #     #print(print_board(board))
-    #     i += 1
-    #     print("game",i)
-    # print("AI won", ai)
