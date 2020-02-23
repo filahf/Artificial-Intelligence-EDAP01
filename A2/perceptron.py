@@ -71,13 +71,13 @@ def main():
     cross_validate(data,labels,epochs,learning_rate,True)
 
     # --------PLOT----------------
-'''     x = np.linspace(0, 85000, 10000000)
-    Y = (-training_weights[0] - training_weights[1] * x) / training_weights[2]
-    chars = [i[0] for i in data]
-    chars_a = [i[1] for i in data]
-    plt.scatter(chars, chars_a, c=labels)
-    plt.plot(x, Y)
-    plt.show() '''
+    # x = np.linspace(0, 85000, 10000000)
+    # Y = (-training_weights[0] - training_weights[1] * x) / training_weights[2]
+    # chars = [i[0] for i in data]
+    # chars_a = [i[1] for i in data]
+    # plt.scatter(chars, chars_a, c=labels)
+    # plt.plot(x, Y)
+    # plt.show()
 
 
 if __name__ == "__main__":
