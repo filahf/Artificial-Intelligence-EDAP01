@@ -74,18 +74,18 @@ def main():
     #cross_validate(data,labels,epochs,learning_rate,True)
 
     # --------PLOT----------------
-    # x = np.linspace(0, 85000, 10000000)
-    # Y = (-training_weights[0] - training_weights[1] * x) / training_weights[2]
-    # chars = [i[0] for i in data]
-    # chars_a = [i[1] for i in data]
-    # plt.scatter(chars, chars_a, c=labels)
-    # plt.plot(x, Y,label="Regression line")
-    # plt.suptitle('Linear Regression BGD')
-    # plt.xlabel('Characters')
-    # plt.ylabel("Occurences of a")
-    # plt.legend(ncol=2, loc='upper left')
-    # plt.savefig('perceptron_result.png')
-    # plt.show()
+    x = np.linspace(0, 85000, 10000000)
+    Y = (-training_weights[0] - training_weights[1] * x) / training_weights[2]
+    chars = [i[0] for i in data]
+    chars_a = [i[1] for i in data]
+    plt.scatter(chars, chars_a, c=labels)
+    plt.plot(x, Y,label="Regression line")
+    plt.suptitle('Perceptron')
+    plt.xlabel('Characters')
+    plt.ylabel("Occurences of a")
+    plt.legend(ncol=2, loc='upper left')
+    plt.savefig('perceptron_result.png')
+    plt.show()
 
 
 if __name__ == "__main__":
