@@ -58,8 +58,13 @@ def perform_sgd(chars_all, chars_a, learning_rate, epochs):
     x = np.linspace(0, 1, 100)
     Y = (-w0 - w1 * x) / w2
 
-    plt.plot(x, Y)
+    plt.plot(x, Y, label="Regression line")
+    plt.legend(ncol=2, loc='upper left')
+    plt.suptitle('Linear Regression SGD')
+    plt.xlabel('Characters')
+    plt.ylabel("Occurences of a")
     plt.scatter(chars_all, chars_a)
+    plt.savefig('SGD_result.png')
     plt.show()
 
 
@@ -71,8 +76,13 @@ def perform_bgd(chars_all, chars_a, learning_rate, epochs, batch_size):
     x = np.linspace(0, 1, 100)
     Y = (-w0[1] - w1[1] * x) / w2[1]
 
-    plt.plot(x, Y)
+    plt.plot(x, Y, label="Regression line")
     plt.scatter(chars_all, chars_a)
+    plt.legend(ncol=2, loc='upper left')
+    plt.suptitle('Linear Regression BGD')
+    plt.xlabel('Characters')
+    plt.ylabel("Occurences of a")
+    plt.savefig('BGD_result.png')
     plt.show()
 
 
@@ -82,8 +92,8 @@ def main():
     epochs = 100000
     chars_all, chars_a = data.load_data(
         "/home/filip/Documents/Artificial-Intelligence-EDAP01/A2/salammbo_a_en.tsv")
-    #perform_sgd(chars_all, chars_a, learning_rate, epochs)
-    perform_bgd(chars_all, chars_a,learning_rate,epochs,batch_size)
+    perform_sgd(chars_all, chars_a, learning_rate, epochs)
+    #perform_bgd(chars_all, chars_a,learning_rate,epochs,batch_size)
 
 
 if __name__ == "__main__":

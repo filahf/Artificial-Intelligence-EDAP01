@@ -39,16 +39,20 @@ def train(training_set, labels, learning_rate, epochs, logistic = False):
 def cross_validate(data,labels,epochs,learning_rate,logistic):
     correct_guess = 0
     i = 1
-    for i in range(30):
+    for i in range(len(data)):
         train_data = data.copy()
         train_labels = labels.copy()
         del train_data[i]
         del train_labels[i]
         sample = data[i]
         weights = train(train_data,train_labels,learning_rate,epochs,logistic)
-        print(predict(weights,np.array(sample),logistic))
         if (predict(weights,np.array(sample),logistic) == labels[i]):
+            print('correct')
             correct_guess += 1
+        else:
+            print("Prediction",predict(weights,np.array(sample),logistic))
+            print(sample)
+            print("wrong at iteration: ", i)
     print(correct_guess/30)
     return correct_guess / 30
 
@@ -57,18 +61,18 @@ def cross_validate(data,labels,epochs,learning_rate,logistic):
 
 def main():
     # ---------ARGS--------------------------
-    epochs = 10000
+    epochs = 2105
     learning_rate = 0.01
     data, labels = libsvm_reader("A2/libsvm_data_unscaled.libsvm")
 
     # ------------PERCE-------------
-    #training_weights = train(data, labels, learning_rate, epochs)
+    #training_weights = train(data, labels, learning_rate, epochs,True)
     #print("Weights", training_weights)
     #print(data)
     #arr = np.array([75352,4871])
     #print("predicted", predict(training_weights, arr, False))
 
-    cross_validate(data,labels,epochs,learning_rate,True)
+    #cross_validate(data,labels,epochs,learning_rate,True)
 
     # --------PLOT----------------
     # x = np.linspace(0, 85000, 10000000)
