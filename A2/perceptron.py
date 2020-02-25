@@ -38,7 +38,6 @@ def train(training_set, labels, learning_rate, epochs, logistic = False):
 
 def cross_validate(data,labels,epochs,learning_rate,logistic):
     correct_guess = 0
-    i = 1
     for i in range(len(data)):
         train_data = data.copy()
         train_labels = labels.copy()
@@ -61,15 +60,15 @@ def cross_validate(data,labels,epochs,learning_rate,logistic):
 
 def main():
     # ---------ARGS--------------------------
-    epochs = 2105
+    epochs = 10000
     learning_rate = 0.01
     data, labels = libsvm_reader("A2/libsvm_data_unscaled.libsvm")
 
     # ------------PERCE-------------
-    #training_weights = train(data, labels, learning_rate, epochs,True)
-    #print("Weights", training_weights)
+    training_weights = train(data, labels, learning_rate, epochs,False)
+    # print("Weights", training_weights)
     #print(data)
-    #arr = np.array([75352,4871])
+    #arr = np.array([18317.0, 1215.0])
     #print("predicted", predict(training_weights, arr, False))
 
     #cross_validate(data,labels,epochs,learning_rate,True)
@@ -80,7 +79,12 @@ def main():
     # chars = [i[0] for i in data]
     # chars_a = [i[1] for i in data]
     # plt.scatter(chars, chars_a, c=labels)
-    # plt.plot(x, Y)
+    # plt.plot(x, Y,label="Regression line")
+    # plt.suptitle('Linear Regression BGD')
+    # plt.xlabel('Characters')
+    # plt.ylabel("Occurences of a")
+    # plt.legend(ncol=2, loc='upper left')
+    # plt.savefig('perceptron_result.png')
     # plt.show()
 
 

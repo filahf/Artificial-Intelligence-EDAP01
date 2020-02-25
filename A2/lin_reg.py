@@ -27,7 +27,7 @@ def bgd(X, y, learning_rate, epochs, batch_size):
             w0 -= learning_rate * phi_w0
             w1 -= learning_rate * phi_w1
             w2 -= learning_rate * phi_w2
-    return w0, w1, w2
+    return np.mean(w0), np.mean(w1), np.mean(w2)
 
 
 def sgd(X, y, learning_rate, epochs):
@@ -74,7 +74,7 @@ def perform_bgd(chars_all, chars_a, learning_rate, epochs, batch_size):
     print("w1", w1)
     print("w2", w2)
     x = np.linspace(0, 1, 100)
-    Y = (-w0[1] - w1[1] * x) / w2[1]
+    Y = (-w0 - w1 * x) / w2
 
     plt.plot(x, Y, label="Regression line")
     plt.scatter(chars_all, chars_a)
@@ -92,8 +92,8 @@ def main():
     epochs = 100000
     chars_all, chars_a = data.load_data(
         "/home/filip/Documents/Artificial-Intelligence-EDAP01/A2/salammbo_a_en.tsv")
-    perform_sgd(chars_all, chars_a, learning_rate, epochs)
-    #perform_bgd(chars_all, chars_a,learning_rate,epochs,batch_size)
+    #perform_sgd(chars_all, chars_a, learning_rate, epochs)
+    perform_bgd(chars_all, chars_a,learning_rate,epochs,batch_size)
 
 
 if __name__ == "__main__":
