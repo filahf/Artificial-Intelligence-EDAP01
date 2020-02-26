@@ -25,7 +25,7 @@ def predict(weights, input, logistic):
             return 0
 
 
-def train(training_set, labels, learning_rate, epochs, logistic = False):
+def train(training_set, labels, learning_rate, epochs, logistic=False):
     weights = np.zeros(3)
     for i in range(epochs):
         for inputs, label in zip(training_set, labels):
@@ -36,7 +36,8 @@ def train(training_set, labels, learning_rate, epochs, logistic = False):
             weights[0] += learning_rate * (label - prediction)
     return weights
 
-def cross_validate(data,labels,epochs,learning_rate,logistic):
+
+def cross_validate(data, labels, epochs, learning_rate, logistic):
     correct_guess = 0
     for i in range(len(data)):
         train_data = data.copy()
@@ -44,18 +45,17 @@ def cross_validate(data,labels,epochs,learning_rate,logistic):
         del train_data[i]
         del train_labels[i]
         sample = data[i]
-        weights = train(train_data,train_labels,learning_rate,epochs,logistic)
-        if (predict(weights,np.array(sample),logistic) == labels[i]):
+        weights = train(train_data, train_labels,
+                        learning_rate, epochs, logistic)
+        if (predict(weights, np.array(sample), logistic) == labels[i]):
             print('correct')
             correct_guess += 1
         else:
-            print("Prediction",predict(weights,np.array(sample),logistic))
+            print("Prediction", predict(weights, np.array(sample), logistic))
             print(sample)
             print("wrong at iteration: ", i)
     print(correct_guess/30)
     return correct_guess / 30
-
-
 
 
 def main():
@@ -65,13 +65,13 @@ def main():
     data, labels = libsvm_reader("A2/libsvm_data_unscaled.libsvm")
 
     # ------------PERCE-------------
-    training_weights = train(data, labels, learning_rate, epochs,False)
-    # print("Weights", training_weights)
-    #print(data)
+    training_weights = train(data, labels, learning_rate, epochs, False)
+    print("Weights", training_weights)
+    # print(data)
     #arr = np.array([18317.0, 1215.0])
     #print("predicted", predict(training_weights, arr, False))
 
-    #cross_validate(data,labels,epochs,learning_rate,True)
+    # cross_validate(data,labels,epochs,learning_rate,True)
 
     # --------PLOT----------------
     x = np.linspace(0, 85000, 10000000)
@@ -79,7 +79,7 @@ def main():
     chars = [i[0] for i in data]
     chars_a = [i[1] for i in data]
     plt.scatter(chars, chars_a, c=labels)
-    plt.plot(x, Y,label="Regression line")
+    plt.plot(x, Y, label="Regression line")
     plt.suptitle('Perceptron')
     plt.xlabel('Characters')
     plt.ylabel("Occurences of a")
