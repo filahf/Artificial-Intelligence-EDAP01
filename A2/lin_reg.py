@@ -6,17 +6,20 @@ import matplotlib.pyplot as plt
 
 def bgd(X, y, learning_rate, epochs):
     w0, w1, w2 = 1, 1, 1
-    #weights = np.ones(3)
+    phi_w0,phi_w1,phi_w2 = 1,1,1
     m = len(X)
     for iters in range(epochs):
         for i in range(m):
-            phi_w0 = 2 * (((w0) + (w1 * X[i]) + (w2 * y[i])))
-            phi_w1 = 2 * (((w0) + (w1 * X[i]) + (w2 * y[i])) * X[i])
-            phi_w2 = 2 * (((w0) + (w1 * X[i]) + (w2 * y[i])) * y[i])
+            phi_w0 += 2 * (((w0) + (w1 * X[i]) + (w2 * y[i])))
+            phi_w1 += 2 * (((w0) + (w1 * X[i]) + (w2 * y[i])) * X[i])
+            phi_w2 += 2 * (((w0) + (w1 * X[i]) + (w2 * y[i])) * y[i])
+        phi_w0 = phi_w0/m
+        phi_w1 = phi_w1/m
+        phi_w2 = phi_w2/m
 
-            w0 -= learning_rate * phi_w0
-            w1 -= learning_rate * phi_w1
-            w2 -= learning_rate * phi_w2
+        w0 -= learning_rate * phi_w0
+        w1 -= learning_rate * phi_w1
+        w2 -= learning_rate * phi_w2
     return w0,w1,w2
 
 def sgd(X, y, learning_rate, epochs):
