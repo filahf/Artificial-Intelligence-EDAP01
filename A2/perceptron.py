@@ -50,19 +50,19 @@ def cross_validate(data, labels, epochs, learning_rate, logistic):
         weights = train(train_data, train_labels,
                         learning_rate, epochs, logistic)
         if (predict(weights, np.array(sample), logistic) == labels[i]):
-            print('correct')
+            print('correct prediction at iteration: ', i + 1 )
             correct_guess += 1
         else:
             print("Prediction", predict(weights, np.array(sample), logistic))
             print(sample)
-            print("wrong at iteration: ", i)
+            print("wrong prediction at iteration: ", i)
     print(correct_guess/30)
     return correct_guess / 30
 
 
 def main():
     # ---------ARGS--------------------------
-    epochs = 1000
+    epochs = 10000
     learning_rate = 0.1
     data, labels = libsvm_reader("A2/libsvm_data_unscaled.libsvm")
 
@@ -72,7 +72,7 @@ def main():
     #print("Weights", training_weights)
 
 
-    cross_validate(data,labels,epochs,learning_rate,True) # Last argument defines threshold function False == Linear True == Logistic
+    cross_validate(data,labels,epochs,learning_rate,False) # Last argument defines threshold function False == Linear True == Logistic
 
     # --------PLOT----------------
 '''     x = np.linspace(0, 85000, 10000000)
