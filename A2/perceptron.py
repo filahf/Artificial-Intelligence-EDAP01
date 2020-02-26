@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+#Inspired by https://medium.com/@thomascountz/19-line-line-by-line-python-perceptron-b6f113b161f3
+#
 
 def libsvm_reader(file):
     data = []
@@ -64,14 +66,13 @@ def main():
     learning_rate = 0.01
     data, labels = libsvm_reader("A2/libsvm_data_unscaled.libsvm")
 
-    # ------------PERCE-------------
-    training_weights = train(data, labels, learning_rate, epochs, False)
-    print("Weights", training_weights)
-    # print(data)
-    #arr = np.array([18317.0, 1215.0])
-    #print("predicted", predict(training_weights, arr, False))
+    # ------------PERCEPTRON-------------
+    
+    training_weights = train(data, labels, learning_rate, epochs, False) # Last argument defines threshold function False == Linear True == Logistic
+    #print("Weights", training_weights)
 
-    # cross_validate(data,labels,epochs,learning_rate,True)
+
+    # cross_validate(data,labels,epochs,learning_rate,True) # Last argument defines threshold function False == Linear True == Logistic
 
     # --------PLOT----------------
     x = np.linspace(0, 85000, 10000000)
