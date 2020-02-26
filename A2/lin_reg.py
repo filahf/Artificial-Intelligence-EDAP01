@@ -9,26 +9,20 @@ def col_of_ones(X):
     return X
 
 
-def bgd(X, y, learning_rate, epochs, batch_size):
+def bgd(X, y, learning_rate, epochs):
     w0, w1, w2 = 1, 1, 1
     #weights = np.ones(3)
     m = len(X)
     for iters in range(epochs):
-        indices = np.random.permutation(m)
-        X = X[indices]
-        y = y[indices]
-        for i in range(0, m, batch_size):
-            X_i = X[i:i+batch_size]
-            y_i = y[i:i+batch_size]
-            phi_w0 = 2 * (((w0 * 1) + (w1 * X_i) + (w2 * y_i)))
-            phi_w1 = 2 * (((w0 * 1) + (w1 * X_i) + (w2 * y_i)) * X_i)
-            phi_w2 = 2 * (((w0 * 1) + (w1 * X_i) + (w2 * y_i)) * y_i)
+        for i in range(m):
+            phi_w0 = 2 * (((w0) + (w1 * X[i]) + (w2 * y[i])))
+            phi_w1 = 2 * (((w0) + (w1 * X[i]) + (w2 * y[i])) * X[i])
+            phi_w2 = 2 * (((w0) + (w1 * X[i]) + (w2 * y[i])) * y[i])
 
             w0 -= learning_rate * phi_w0
             w1 -= learning_rate * phi_w1
             w2 -= learning_rate * phi_w2
-    return np.mean(w0), np.mean(w1), np.mean(w2)
-
+    return w0,w1,w2
 
 def sgd(X, y, learning_rate, epochs):
     w0, w1, w2 = 1, 1, 1
@@ -68,8 +62,8 @@ def perform_sgd(chars_all, chars_a, learning_rate, epochs):
     plt.show()
 
 
-def perform_bgd(chars_all, chars_a, learning_rate, epochs, batch_size):
-    w0, w1, w2 = bgd(chars_all, chars_a, learning_rate, epochs, batch_size)
+def perform_bgd(chars_all, chars_a, learning_rate, epochs):
+    w0, w1, w2 = bgd(chars_all, chars_a, learning_rate, epochs)
     print("w0", w0)
     print("w1", w1)
     print("w2", w2)
@@ -87,13 +81,12 @@ def perform_bgd(chars_all, chars_a, learning_rate, epochs, batch_size):
 
 
 def main():
-    batch_size = 5
     learning_rate = 0.01
     epochs = 100000
     chars_all, chars_a = data.load_data(
         "A2/salammbo_a_en.tsv")
-    perform_sgd(chars_all, chars_a, learning_rate, epochs)
-    #perform_bgd(chars_all, chars_a,learning_rate,epochs,batch_size)
+    #perform_sgd(chars_all, chars_a, learning_rate, epochs)
+    perform_bgd(chars_all, chars_a,learning_rate,epochs)
 
 
 if __name__ == "__main__":
