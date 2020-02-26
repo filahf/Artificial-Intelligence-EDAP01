@@ -4,11 +4,6 @@ import random
 import matplotlib.pyplot as plt
 
 
-def col_of_ones(X):
-    X = np.c_[np.ones((X.shape[0])), X]
-    return X
-
-
 def bgd(X, y, learning_rate, epochs):
     w0, w1, w2 = 1, 1, 1
     #weights = np.ones(3)

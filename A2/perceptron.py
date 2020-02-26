@@ -62,20 +62,20 @@ def cross_validate(data, labels, epochs, learning_rate, logistic):
 
 def main():
     # ---------ARGS--------------------------
-    epochs = 10000
-    learning_rate = 0.01
+    epochs = 1000
+    learning_rate = 0.1
     data, labels = libsvm_reader("A2/libsvm_data_unscaled.libsvm")
 
     # ------------PERCEPTRON-------------
     
-    training_weights = train(data, labels, learning_rate, epochs, False) # Last argument defines threshold function False == Linear True == Logistic
+    #training_weights = train(data, labels, learning_rate, epochs, False) # Last argument defines threshold function False == Linear True == Logistic
     #print("Weights", training_weights)
 
 
-    # cross_validate(data,labels,epochs,learning_rate,True) # Last argument defines threshold function False == Linear True == Logistic
+    cross_validate(data,labels,epochs,learning_rate,True) # Last argument defines threshold function False == Linear True == Logistic
 
     # --------PLOT----------------
-    x = np.linspace(0, 85000, 10000000)
+'''     x = np.linspace(0, 85000, 10000000)
     Y = (-training_weights[0] - training_weights[1] * x) / training_weights[2]
     chars = [i[0] for i in data]
     chars_a = [i[1] for i in data]
@@ -86,7 +86,7 @@ def main():
     plt.ylabel("Occurences of a")
     plt.legend(ncol=2, loc='upper left')
     plt.savefig('perceptron_result.png')
-    plt.show()
+    plt.show() '''
 
 
 if __name__ == "__main__":
