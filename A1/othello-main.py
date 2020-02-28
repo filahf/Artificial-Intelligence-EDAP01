@@ -3,16 +3,17 @@
 import random
 import math
 import time
-
+# Based on Peter Norvigs Paradigms of Artificial Intelligence and Daniel Connellys implemenation
 
 EMPTY, BLACK, WHITE, OUTER = '.', '\033[1;30;41m \033[0m', '\033[1;30;47m \033[0m', ''
 DIRECTIONS = (-11, -10, -9, -1, 1, 9, 10, 11)
+max_time = 0
 
 def char_range(c1, c2):
     for c in range(ord(c1), ord(c2)+1):
         yield chr(c)
 
-def move_to_nbr(move):
+def move_to_int(move):
     y = ord(move[:1]) - 96
     x = move[1:]
     return int(x + str(y))
@@ -39,7 +40,9 @@ def print_board(board):
     return rep
 
 def opponent(player):
-    return BLACK if player is WHITE else WHITE
+    if(player is BLACK):
+        return WHITE
+    return BLACK
 
 
 def find_bracket(square, player, board, direction):
@@ -53,9 +56,9 @@ def find_bracket(square, player, board, direction):
 
 
 def is_legal(move, player, board):
-    def hasbracket(direction): return find_bracket(
+    def bracket(direction): return find_bracket(
         move, player, board, direction)
-    return board[move] == EMPTY and any(map(hasbracket, DIRECTIONS))
+    return board[move] == EMPTY and any(map(bracket, DIRECTIONS))
 
 
 def make_move(move, player, board):
@@ -110,30 +113,29 @@ def final_value(player, board):
     elif(score_diff == 0):
         return 0
 
+# According to Peter Norvigs Paradigms of Artificial Intelligence page 
+def alpha_beta(player, board, alpha, beta, depth, max_time):
+    if depth == 0 or time.time() >= max_time:
+        return score(player, board), "no move available"
 
-def alpha_beta(player, board, alpha, beta, depth):
-    if depth == 0:
-        return score(player, board), "null"
-
-    def value(board, alpha, beta):
-        return -alpha_beta(opponent(player), board, -beta, -alpha, depth-1)[0]
     moves = legal_moves(player, board)
     if not moves:
         if not any_legal_move(opponent(player), board):
             return final_value(player, board), "null"
-        return value(board, alpha, beta), "null"
+        return -alpha_beta(opponent(player), board, -beta, -alpha, depth-1, max_time)[0], "no move available"
 
     best_move = moves[0]
+
     for move in moves:
         if alpha >= beta:
             break
-        val = value(make_move(move, player, list(board)), alpha, beta)
+        val = -alpha_beta(opponent(player), make_move(move, player, list(board)), -beta, -alpha, depth-1, max_time)[0]
         if val > alpha:
             alpha = val
             best_move = move
     return alpha, best_move
 
-def availble_human_moves(player,board):
+def available_human_moves(player,board):
     arr = legal_moves(player,board)
     chars = "abcdefgh"
     movs = []
@@ -159,12 +161,12 @@ def get_winner(board):
 def player_move(player,board):
     print(print_board(board))
     print("You are playing as "+ player + ", your turn!")
-    print("Availble moves are: ", availble_human_moves(player,board))
+    print("Available moves are: ", available_human_moves(player,board))
     move = input("Enter move ")
-    if(move not in availble_human_moves(player,board)):
+    if(move not in available_human_moves(player,board)):
         print("Illegal move, try again")
         move = input("Enter move ")
-    board = make_move(move_to_nbr(move),player,board)
+    board = make_move(move_to_int(move),player,board)
     turn = next_player(board,player)
     return board, turn
 
@@ -174,7 +176,8 @@ def player_move(player,board):
 def main():
     board = initial_board()
     player_input = input("Choose color b/w: ")
-    delay = int(input("How long do you want to wait before the computer makes a move?"))
+    global max_time
+    max_time = int(input("How long do you want to wait in seconds before the computer makes a move? "))
     player = EMPTY
     if(player_input == "b"):
         player = BLACK
@@ -186,9 +189,7 @@ def main():
     while(True):
         if(turn == BLACK):
             if(ai == BLACK):
-                print("pruning...")
-                time.sleep(delay)
-                move = alpha_beta(BLACK, board, -math.inf,math.inf, 7)[1]
+                move = alpha_beta(BLACK, board, -math.inf,math.inf, 7, time.time() + max_time)[1]
                 board = make_move(move,BLACK,board)
                 turn = next_player(board,BLACK)
                 print("--------------------------------------------")
@@ -196,9 +197,7 @@ def main():
                 board, turn = player_move(player,board)
         if(turn == WHITE):
             if(ai == WHITE):
-                print("pruning...")
-                time.sleep(delay)
-                move = alpha_beta(WHITE, board, -math.inf,math.inf, 7)[1]
+                move = alpha_beta(WHITE, board, -math.inf,math.inf, 7, time.time() + max_time)[1]
                 board = make_move(move,WHITE,board)
                 turn = next_player(board,WHITE)
                 print("--------------------------------------------")
