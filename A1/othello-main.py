@@ -1,5 +1,3 @@
-
-
 import random
 import math
 import time
@@ -9,6 +7,7 @@ EMPTY, BLACK, WHITE, OUTER = '.', '\033[1;30;41m \033[0m', '\033[1;30;47m \033[0
 DIRECTIONS = (-11, -10, -9, -1, 1, 9, 10, 11)
 max_time = 0
 
+#https://stackoverflow.com/questions/7001144/range-over-character-in-python
 def char_range(c1, c2):
     for c in range(ord(c1), ord(c2)+1):
         yield chr(c)
@@ -113,7 +112,7 @@ def final_value(player, board):
     elif(score_diff == 0):
         return 0
 
-# According to Peter Norvigs Paradigms of Artificial Intelligence page 
+# According to Peter Norvigs Paradigms of Artificial Intelligence page 616
 def alpha_beta(player, board, alpha, beta, depth, max_time):
     if depth == 0 or time.time() >= max_time:
         return score(player, board), "no move available"
@@ -121,13 +120,14 @@ def alpha_beta(player, board, alpha, beta, depth, max_time):
     moves = legal_moves(player, board)
     if not moves:
         if not any_legal_move(opponent(player), board):
-            return final_value(player, board), "null"
+            return final_value(player, board), "no move available"
+        # Negative since its the opponents perspective of the board
         return -alpha_beta(opponent(player), board, -beta, -alpha, depth-1, max_time)[0], "no move available"
 
     best_move = moves[0]
 
     for move in moves:
-        if alpha >= beta:
+        if alpha >= beta: #The opponent wont go down this path, making it irrelevant
             break
         val = -alpha_beta(opponent(player), make_move(move, player, list(board)), -beta, -alpha, depth-1, max_time)[0]
         if val > alpha:
@@ -177,7 +177,7 @@ def main():
     board = initial_board()
     player_input = input("Choose color b/w: ")
     global max_time
-    max_time = int(input("How long do you want to wait in seconds before the computer makes a move? "))
+    max_time = int(input("Maximum time to wait in seconds before the computer makes a move "))
     player = EMPTY
     if(player_input == "b"):
         player = BLACK
