@@ -1,4 +1,5 @@
 import random
+from random import choices
 NORTH, EAST, SOUTH, WEST = 0, 1, 2, 3
 directions = [NORTH, EAST, SOUTH, WEST]
 
@@ -10,7 +11,7 @@ def grid(width, height):
     robot_dir = random.choice(directions)
 
 
-def sorrounding_pos(pos, step):
+def surrounding_pos(pos, step):
     x, y = pos[0], pos[1]
     pos_array = [(x-step, y-step), (x-step, y), (x-step, y+step), (x, y-step),
                  (x, y), (x, y+step), (x+step, y-step), (x+step, y), (x+step, y+step)]
@@ -53,3 +54,10 @@ def wall_close(pos, direction, grid):
 
 
 def sensor():
+    population = [true_loc, surr_pos_1, surr_pos_2, None]
+    weights = [0.1, 0.05 * 8, 0.025 * 16, 0.1]
+
+    print(choices(population, weights))
+
+
+sensor()
