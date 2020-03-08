@@ -1,7 +1,13 @@
+import random
 NORTH, EAST, SOUTH, WEST = 0, 1, 2, 3
 directions = [NORTH, EAST, SOUTH, WEST]
 
 # step 1 or 2
+
+
+def grid(width, height):
+    robot_loc = random.randint(0, width - 1), random.randint(0, height - 1)
+    robot_dir = random.choice(directions)
 
 
 def sorrounding_pos(pos, step):
@@ -24,3 +30,26 @@ def wall_close(pos, direction, grid):
         return True
     else:
         return False
+
+
+# def move robot
+'''     
+        # prob 0.3 to change direction.
+        rand = random.random()
+        if rand <= 0.3:
+            self.robot_dir = Direction.random(self.robot_dir)
+        while self.robot_faces_wall():
+            self.robot_dir = Direction.random(self.robot_dir)
+
+        x, y = self.robot_location
+
+        # NORTH, EAST, SOUTH, WEST
+        next_locations = [(x, y + 1), (x + 1, y), (x, y - 1), (x - 1, y)]
+        self.robot_location = next_locations[self.robot_dir]
+ '''
+
+# -----------------------------------------------------------
+# MR. ROBOT
+
+
+def sensor():
