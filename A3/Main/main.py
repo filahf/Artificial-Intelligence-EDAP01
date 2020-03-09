@@ -20,7 +20,7 @@ def surrounding_pos(pos, step):
     return next_pos
 
 
-def wall_close(pos, direction, grid):
+def facing_wall(pos, direction, grid):
     x, y = pos[0], pos[1]
     width, height = grid
     check_pos = [(x, y + 1), (x + 1, y), (x, y - 1), (x - 1, y)]
@@ -33,31 +33,47 @@ def wall_close(pos, direction, grid):
         return False
 
 
-# def move robot
-'''     
-        # prob 0.3 to change direction.
-        rand = random.random()
-        if rand <= 0.3:
-            self.robot_dir = Direction.random(self.robot_dir)
-        while self.robot_faces_wall():
-            self.robot_dir = Direction.random(self.robot_dir)
+def move_robot():
+    cases = ["change_dir", None]
+    weights = [0.3, 0.7]
+    prop = choices(cases, weights)
+    if(prop == "change_dir"):
+        new robot_dir
+    while facing_wall():
+        new robot_dir
 
-        x, y = self.robot_location
+    # # prob 0.3 to change direction.
+    # rand = random.random()
+    # if rand <= 0.3:
+    #     self.robot_dir = Direction.random(self.robot_dir)
+    # while self.robot_faces_wall():
+    #     self.robot_dir = Direction.random(self.robot_dir)
 
-        # NORTH, EAST, SOUTH, WEST
-        next_locations = [(x, y + 1), (x + 1, y), (x, y - 1), (x - 1, y)]
-        self.robot_location = next_locations[self.robot_dir]
- '''
+    # x, y = self.robot_location
+
+    # # NORTH, EAST, SOUTH, WEST
+    # next_locations = [(x, y + 1), (x + 1, y), (x, y - 1), (x - 1, y)]
+    # self.robot_location = next_locations[self.robot_dir]
+
 
 # -----------------------------------------------------------
 # MR. ROBOT
 
 
 def sensor():
-    population = [true_loc, surr_pos_1, surr_pos_2, None]
-    weights = [0.1, 0.05 * 8, 0.025 * 16, 0.1]
-
-    print(choices(population, weights))
+    # true_loc, surr_pos_1, surr_pos_2, None
+    cases = [0, 1, 2, None]
+    weights = [0.1, 0.4, 0.4, 0.1]
+    prop = choices(cases, weights)
+    if(prop == 0):
+        return robot_location
+    elif(prop == 1):
+        return surrounding_pos(pos, 1)
+    elif(prop == 2):
+        return surrounding_pos(pos, 2)
+    else:
+        return None
+    print(choices(choices, weights))
 
 
 sensor()
