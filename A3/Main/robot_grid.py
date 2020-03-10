@@ -1,7 +1,7 @@
 import random
 from random import choices
-NORTH, EAST, SOUTH, WEST = 0, 1, 2, 3
-directions = [NORTH, EAST, SOUTH, WEST]
+# North, East, South, West
+directions = [0, 1, 2, 3]
 
 grid = (0, 0)
 robot_loc = (0, 0)
@@ -18,10 +18,16 @@ def grid(width, height):
     return robot_loc, robot_dir
 
 
-def surrounding_pos(step):
-    x, y = robot_loc[0], robot_loc[1]
-    pos_array = [(x-step, y-step), (x-step, y), (x-step, y+step), (x, y-step),
-                 (x, y), (x, y+step), (x+step, y-step), (x+step, y), (x+step, y+step)]
+def surrounding_pos(step_size):
+    x, y = robot_loc
+    one_array = [(x-1, y-1), (x-1, y), (x-1, y+1), (x, y-1),
+                 (x, y), (x, y+1), (x+1, y-1), (x+1, y), (x+1, y+1)]
+    two_array = [(x-2, y-2), (x-2, y-1), (x-2, y), (x-2, y+1), (x-2, y+2), (x-1, y-2), (x-1, y+2), (x, y-2),
+                 (x, y+2), (x+1, y-2), (x+1, y+2), (x+2, y-2), (x+2, y-1), (x+2, y), (x+2, y+1), (x+2, y+2)]
+    if step_size is 1:
+        pos_array = one_array
+    else:
+        pos_array = two_array
     next_pos = random.choice(pos_array)
     if(facing_wall(next_pos)):
         return None
@@ -29,8 +35,16 @@ def surrounding_pos(step):
         return next_pos
 
 
-def facing_wall(move=None):
+def out_of_bounds(move):
+    if move[0] >= grid[0] or move[1] >= grid[1]:
+        return True
+    elif move[0] < 0 or move[1] < 0:
+        return True
+    else:
+        return False
 
+
+def facing_wall(move=None):
     if(move != None):
         next_pos = move
     else:
@@ -38,22 +52,20 @@ def facing_wall(move=None):
         width, height = grid
         check_pos = [(x, y + 1), (x + 1, y), (x, y - 1), (x - 1, y)]
         next_pos = check_pos[robot_dir]
-    if next_pos[0] >= grid[0] or next_pos[1] >= grid[1]:
-        return True
-    elif next_pos[0] < 0 or next_pos[1] < 0:
-        return True
-    else:
-        return False
+
+    return out_of_bounds(next_pos)
 
 
 def move_robot():
     global robot_loc
     global robot_dir
+    # P( h_t+1 != h_t | not encountering a wall) = 0.3
     cases = ["change_dir", None]
     weights = [0.3, 0.7]
     prop = choices(cases, weights)
     if(prop == "change_dir"):
         robot_dir = random.choice(directions)
+    # P( h_t+1 != h_t | encountering a wall) = 1.0
     while facing_wall():
         robot_dir = random.choice(directions)
     x, y = robot_loc[0], robot_loc[1]
@@ -79,6 +91,7 @@ def sensor():
 
 
 grid(4, 4)
+
 print("current robot pos", robot_loc, "sensor thinks", sensor())
 print(move_robot())
 print("current robot pos", robot_loc, "sensor thinks", sensor())
