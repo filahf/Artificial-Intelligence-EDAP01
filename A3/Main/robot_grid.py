@@ -1,5 +1,6 @@
 import random
 from random import choices
+from hmm import forward_filter, manhattan_distance
 # North, East, South, West
 directions = [0, 1, 2, 3]
 
@@ -8,7 +9,7 @@ robot_loc = (0, 0)
 robot_dir = 0
 
 
-def grid(width, height):
+def init_grid(width, height):
     global robot_loc
     global robot_dir
     global grid
@@ -72,7 +73,7 @@ def move_robot():
     step_dirs = [(x, y + 1), (x + 1, y), (x, y - 1),
                  (x - 1, y)]  # Fixa det här
     robot_loc = step_dirs[robot_dir]
-    print("Robot moved to ", robot_loc, " from ", x, y)
+    #print("Robot moved to ", robot_loc, " from ", (x, y))
 
 
 def sensor():
@@ -90,8 +91,27 @@ def sensor():
         return None
 
 
-grid(4, 4)
+def main():
+    init_grid(8, 8)
+    steps = 0
+    correct_guess = 0
+    man_dist = 0
+    for i in range(1000):
+        move_robot()
+        steps += 1
+        sensed_move = sensor()
 
-print("current robot pos", robot_loc, "sensor thinks", sensor())
-print(move_robot())
-print("current robot pos", robot_loc, "sensor thinks", sensor())
+        guessed_move = forward_filter(sensed_move)
+        #print("Actual robot loc", robot_loc, "sensor thinks", sensed_move)
+        if guessed_move == robot_loc:
+            correct_guess += 1
+        man_dist += manhattan_distance(robot_loc, guessed_move)
+        print("man_dist", manhattan_distance(robot_loc, guessed_move),
+              "when sensor thinks", sensed_move)
+        print("current stat", correct_guess/steps*100, "%")
+    print("Final stat acc:", correct_guess/steps *
+          100, "%", "avg man_dist", man_dist/steps, " at a total of ", steps, " steps")
+
+
+if __name__ == '__main__':
+    main()

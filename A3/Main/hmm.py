@@ -1,13 +1,11 @@
 
 import numpy as np
-import sys
-np.set_printoptions(threshold=sys.maxsize)
 
 
 # http://www.adeveloperdiary.com/data-science/machine-learning/introduction-to-hidden-markov-model/
 # North, East, South, West
 directions = [0, 1, 2, 3]
-grid = (6, 6)
+grid = (8, 8)
 
 # Your transition matrix will thus have the dimensions
 # (rows*columns*4) x (rows*columns*4) and you will need (rows*columns+1) observation matrices,
@@ -22,16 +20,18 @@ def out_of_bounds(move):
         return False
 
 
-def init_state(width, height):
+def init_state():
     # the initial postion of the robot. Must be on the grid somewhere with a direction-> P(X0 = i) = 1 / widht*height*directions
-    whd_length = width * height * len(directions)
-    i_state = [1 / whd_length] * whd_length
-    return i_state
+    whd_length = grid[0] * grid[1] * len(directions)
+    probability = 1 / whd_length
+    init_state = np.array([[probability] for y in range(whd_length)])
+    return init_state
 
 
-def transition_model(height, width):
+def transition_model():
     matrix = np.array(
-        np.zeros(shape=(grid[0] * height * 4, grid[0] * height * 4)))
+        np.zeros(shape=(grid[0] * grid[1] * 4, grid[0] * grid[1] * 4)))
+    width, height = grid
 
     def fill_trans_row(width, height, x, y, d, row):
         col = 0
@@ -100,30 +100,54 @@ def set_neighbour_prob(obs, neigbours, prob):
 def sensor_model(pose):
     obs = np.array(
         np.zeros(shape=(grid[0] * grid[1] * 4, grid[0] * grid[1] * 4)))
-    x, y = pose
+    if(pose is None):
+        for i in range(grid[0]):
+            for j in range(grid[1]):
+                index = 4*i*grid[1]+4*j
+                if j == 0 or j == grid[1]-1:
+                    if i == 0 or i == grid[0]-1:
+                        for k in range(4):
+                            obs[index + k, index+k] = 0.625
+                    else:
+                        for k in range(4):
+                            obs[index + k, index+k] = 0.5
+                elif i == 0 or k == grid[1]-1:
+                    for k in range(4):
+                        obs[index + k, index+k] = 0.5
+                else:
+                    for k in range(4):
+                        obs[index + k, index+k] = 0.325
+    else:
+        x, y = pose
 
-    index = (x * 4 * grid[1] + y * 4) + 1
-    for i in range(4):
-        obs[index, index] = 0.1
+        index = (x * 4 * grid[1] + y * 4) + 1
+        for i in range(4):
+            obs[index, index] = 0.1
 
-    set_neighbour_prob(obs, get_neighbours(pose, 1), 0.05)
-    set_neighbour_prob(obs, get_neighbours(pose, 2), 0.025)
+        set_neighbour_prob(obs, get_neighbours(pose, 1), 0.05)
+        set_neighbour_prob(obs, get_neighbours(pose, 2), 0.025)
 
     return obs
 
 
-def forward_filter(old_f, trans, sensed_cord):
+def manhattan_distance(pose, sensed_posed):
+    max = abs(pose[0]-sensed_posed[0])
+    if abs(pose[1]-sensed_posed[1]) > max:
+        max = abs(pose[1]-sensed_posed[1])
+    return max
+
+
+def forward_filter(sensed_cord):
+    old_f = init_state()
+    trans = transition_model()
     f_new = np.dot(np.dot(sensor_model(sensed_cord), trans), old_f)
     f_norm = f_new / np.sum(f_new)
-    return f_new
+
+    index = np.argmax(f_norm)
+    x = (index // 4) // grid[1]
+    y = (index // 4) % grid[1]
+    return (x, y)
 
 
-# print(transition_model(4, 4))
-# print(get_neighbours((0, 0), 2))
-m = 6 * 6 * 4
-probability = 1 / m
-f_old = np.array([[probability] for y in range(m)])
-# print(f_old)
-trans = transition_model(6, 6)
-print(forward_filter(f_old, trans, (0, 0)))
-#print(sensor_model((1, 2)))
+#print(forward_filter(f_old, trans, (0, 0)))
+#print(forward_filter((0, 0)))
