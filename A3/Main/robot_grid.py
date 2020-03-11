@@ -96,7 +96,7 @@ def main():
     steps = 0
     correct_guess = 0
     man_dist = 0
-    for i in range(1000):
+    for i in range(100):
         move_robot()
         steps += 1
         sensed_move = sensor()
