@@ -2,17 +2,12 @@
 
 #### Report:
 
-Report:
-
 Write a brief (max 3 filled A4-pages) report that adheres to the following structure and encloses the listed points:
 
 - [ ] Summary of the implementation task in your own words
       Description of your implementation, mentioning how you encoded the states, transition and observation model. Do NOT list code!
-
 - [ ] Discussion of your results, answering the question: "How accurately can you track the robot?". To do this, compare your results to pure guessing and to using the sensor readings only in terms of error rates and margin.
-
 - [ ] Summary of the article you read.
-
 - [ ] Discussion of the relation between your implementation and the work described in the article, answering the question: "Is the HMM approach as implemented suitable for solving the problem of robot localisation?". Give clear evidence / motivation for your statement.
 
 #### Passing Criteria:
