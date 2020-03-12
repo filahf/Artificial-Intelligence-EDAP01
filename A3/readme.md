@@ -13,7 +13,7 @@ Write a brief (max 3 filled A4-pages) report that adheres to the following struc
 #### Passing Criteria:
 
 - [ ] The implementation must be accessible, executable and produce reasonable results according to the instructions you give in the submission e-mail.
-- [ ] If the Java-viewer is used, the visualisation of transition and sensor models for a 4x4-grid should look like what is given as example in the instructions, and it must be clear that the visualised models correspond to those used for calculations
+- [ ] ~~If the Java-viewer is used, the visualisation of transition and sensor models for a 4x4-grid should look like what is given as example in the instructions, and it must be clear that the visualised models correspond to those used for calculations~~
 - [x] The report must contain the above listed items.
 - [x] The description of your implementation must actually match your implementation.
 - [ ] The summary of the article must clearly be written by you in your own words, so that it becomes clear that you actually have read and understood the overall idea and achievements.
