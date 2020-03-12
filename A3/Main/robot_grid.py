@@ -1,6 +1,8 @@
 import random
 from random import choices
-from hmm import forward_filter, manhattan_distance
+import matplotlib.pyplot as plt
+import numpy as np
+from hmm import forward_filter, manhattan_distance, init_state
 # North, East, South, West
 directions = [0, 1, 2, 3]
 
@@ -25,7 +27,7 @@ def surrounding_pos(step_size):
                  (x, y), (x, y+1), (x+1, y-1), (x+1, y), (x+1, y+1)]
     two_array = [(x-2, y-2), (x-2, y-1), (x-2, y), (x-2, y+1), (x-2, y+2), (x-1, y-2), (x-1, y+2), (x, y-2),
                  (x, y+2), (x+1, y-2), (x+1, y+2), (x+2, y-2), (x+2, y-1), (x+2, y), (x+2, y+1), (x+2, y+2)]
-    if step_size is 1:
+    if step_size == 1:
         pos_array = one_array
     else:
         pos_array = two_array
@@ -73,7 +75,7 @@ def move_robot():
     step_dirs = [(x, y + 1), (x + 1, y), (x, y - 1),
                  (x - 1, y)]  # Fixa det här
     robot_loc = step_dirs[robot_dir]
-    #print("Robot moved to ", robot_loc, " from ", (x, y))
+    # print("Robot moved to ", robot_loc, " from ", (x, y))
 
 
 def sensor():
@@ -96,21 +98,41 @@ def main():
     steps = 0
     correct_guess = 0
     man_dist = 0
+    y_guess = []
+    y_dist = []
+    f_old = None
     for i in range(100):
         move_robot()
         steps += 1
         sensed_move = sensor()
 
-        guessed_move = forward_filter(sensed_move)
-        #print("Actual robot loc", robot_loc, "sensor thinks", sensed_move)
+        guessed_move, f = forward_filter(sensed_move, f_old)
+        # print("Actual robot loc", robot_loc, "sensor thinks", sensed_move)
         if guessed_move == robot_loc:
             correct_guess += 1
-        man_dist += manhattan_distance(robot_loc, guessed_move)
-        print("man_dist", manhattan_distance(robot_loc, guessed_move),
-              "when sensor thinks", sensed_move)
-        print("current stat", correct_guess/steps*100, "%")
-    print("Final stat acc:", correct_guess/steps *
-          100, "%", "avg man_dist", man_dist/steps, " at a total of ", steps, " steps")
+        distance = manhattan_distance(robot_loc, guessed_move)
+        man_dist += distance
+        f_old = f
+        print("Acc ", correct_guess/steps*100,
+              " Dist ", distance, "iter", i)
+        y_dist.append(distance)
+        y_guess.append(correct_guess/steps*100)
+# -------------------PLOT------------------------------------
+    x = np.arange(steps)
+    fig, ax = plt.subplots(2, 1, True)
+    ax[0].plot(x, y_dist, label="Manhattan Distance")
+    ax[0].set(ylabel="Manhattan Distance")
+    ax[1].plot(x, y_guess, label="Correct guesses")
+    ax[1].set(ylabel="Guess Accuracy (%)", xlabel="Move")
+    props = dict(boxstyle='round', facecolor='wheat', alpha=0.9)
+    avg_man = "Avg distance:\n" + str(man_dist/steps)
+    avg_acc = "Avg accuracy:\n" + str((round(correct_guess/steps *
+                                             100, 2))) + " %"
+    ax[0].text(0.05, 0.95, avg_man, transform=ax[0].transAxes, fontsize=14,
+               verticalalignment='top', bbox=props)
+    ax[1].text(0.05, 0.95, avg_acc, transform=ax[1].transAxes, fontsize=14,
+               verticalalignment='top', bbox=props)
+    plt.show()
 
 
 if __name__ == '__main__':

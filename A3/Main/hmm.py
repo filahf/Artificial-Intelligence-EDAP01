@@ -137,8 +137,10 @@ def manhattan_distance(pose, sensed_posed):
     return max
 
 
-def forward_filter(sensed_cord):
-    old_f = init_state()
+def forward_filter(sensed_cord, old_f=None):
+    if(old_f is None):
+        old_f = init_state()
+
     trans = transition_model()
     f_new = np.dot(np.dot(sensor_model(sensed_cord), trans), old_f)
     f_norm = f_new / np.sum(f_new)
@@ -146,8 +148,8 @@ def forward_filter(sensed_cord):
     index = np.argmax(f_norm)
     x = (index // 4) // grid[1]
     y = (index // 4) % grid[1]
-    return (x, y)
+    return (x, y), f_norm
 
 
 #print(forward_filter(f_old, trans, (0, 0)))
-#print(forward_filter((0, 0)))
+# print(forward_filter((None)))
