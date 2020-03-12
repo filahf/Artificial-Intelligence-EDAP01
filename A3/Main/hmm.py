@@ -1,5 +1,6 @@
 
 import numpy as np
+import random
 
 
 # http://www.adeveloperdiary.com/data-science/machine-learning/introduction-to-hidden-markov-model/
@@ -125,8 +126,8 @@ def sensor_model(pose):
         for i in range(4):
             obs[index, index] = 0.1
 
-        obs = set_neighbour_prob(obs, get_neighbours(pose, 1), 0.05)
-        obs = set_neighbour_prob(obs, get_neighbours(pose, 2), 0.025)
+        set_neighbour_prob(obs, get_neighbours(pose, 1), 0.05)
+        set_neighbour_prob(obs, get_neighbours(pose, 2), 0.025)
 
     return obs
 

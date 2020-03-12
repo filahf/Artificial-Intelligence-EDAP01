@@ -107,7 +107,9 @@ def main():
         sensed_move = sensor()
 
         guessed_move, f = forward_filter(sensed_move, f_old)
-        # print("Actual robot loc", robot_loc, "sensor thinks", sensed_move)
+        #print("Actual robot loc", robot_loc, "sensor thinks", sensed_move)
+        #print("forward filter predicts", guessed_move)
+
         if guessed_move == robot_loc:
             correct_guess += 1
         distance = manhattan_distance(robot_loc, guessed_move)
