@@ -95,6 +95,7 @@ def set_neighbour_prob(obs, neigbours, prob):
         index = move[0] * grid[0] * 4 + move[1] * 4
         for i in range(4):
             obs[index + i, index + i] = prob
+    return obs
 
 
 def sensor_model(pose):
@@ -124,8 +125,8 @@ def sensor_model(pose):
         for i in range(4):
             obs[index, index] = 0.1
 
-        set_neighbour_prob(obs, get_neighbours(pose, 1), 0.05)
-        set_neighbour_prob(obs, get_neighbours(pose, 2), 0.025)
+        obs = set_neighbour_prob(obs, get_neighbours(pose, 1), 0.05)
+        obs = set_neighbour_prob(obs, get_neighbours(pose, 2), 0.025)
 
     return obs
 
